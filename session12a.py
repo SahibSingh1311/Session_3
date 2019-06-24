@@ -32,7 +32,6 @@ import mysql.connector
 
 class DBHelper:
 
-
     def saveCustomerInDB(self, customer):
         #1. Create SQL Statement
         sqlInsert = "insert into customer values (Null, '{}', '{}','{}') ".format(customer.name,customer.phone, customer.email)
@@ -47,7 +46,6 @@ class DBHelper:
 
         print(customer.name, "SAVED!!")
 
-
     def updateCustomerInDB(self, customer):
         sql = "update customer set name = '{}', phone = '{}', email = '{}' where cid = '{}'".format(customer.name, customer.phone, customer.email, customer.cid )
         con = mysql.connector.connect(user = "root", password ="", host = "localhost", database = "customer")
@@ -56,14 +54,12 @@ class DBHelper:
         con.commit()
         print("Customer Updated")
 
-
     def deleteCustomerDetails(self,customer):
         sql = "delete from customer where cid = {}".format(customer.cid)
         con = mysql.connector.connect(user="root", password="", host="localhost", database="customer")
         cursor = con.cursor()
         cursor.execute(sql)
         con.commit()
-
 
     def fetchAllCustomer(self):
         sql = "select * from customer"
@@ -79,6 +75,15 @@ class DBHelper:
         for row in rows:
             print(row)
 
+    def fetchCustomer(self, cid):
+        sql = "select * from customer where cid = {}".format(cid)
+        con = mysql.connector.connect(user="root", password="", host="localhost", database="customer")
+        cursor = con.cursor()
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        print(row)
+
+
 class customer:
 
     def __init__(self, name, phone, email):
@@ -88,13 +93,14 @@ class customer:
     def showCustomerDetails(self):
         print(">>Name: {} Phone: {} Email: {}".format(self.name, self.phone, self.email ))
 
-
-
+"""
 print("Options: ")
 print("1. Create New Customer")
 print("2. Update Customer")
 print("3. Delete Customer")
 print("4. Show All Customers")
+print("5. Show Particular Customers")
+
 choice = int(input("Enter Choice: "))
 
 if choice == 1:
@@ -109,6 +115,7 @@ if choice == 1:
     if save == "yes":
         db = DBHelper()
         db.saveCustomerInDB(cRef)
+
 elif choice == 2:
     cRef = customer(None, None, None)
     cRef.cid = int(input("Enter Customer ID     : ")) #You NEED TO KNOW THE CUSTOMER ID
@@ -130,7 +137,14 @@ elif choice == 3:
         db = DBHelper()
         db.deleteCustomerDetails(cRef)
         print("Customer Deleted")
-
 elif choice == 4:
     db = DBHelper()
     db.fetchAllCustomer()
+elif choice == 5:
+    cRef = customer(None, None, None)
+    cRef.cid = int(input("Enter Customer ID: "))
+
+    db = DBHelper()
+    db.fetchCustomer(cRef.cid)
+
+"""
